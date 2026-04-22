@@ -2,9 +2,7 @@ CALL gds.graph.project(
   'grafSimilitarityPenulis',
   ['Author', 'Publisher'],
   {
-    PUBLISHED_BY: { orientation: 'UNDIRECTED' }
-  }
-)
+    WORKS_WITH: { orientation: 'UNDIRECTED' }
 
 CALL gds.nodeSimilarity.stream('grafSimilitarityPenulis')
 YIELD node1, node2, similarity
