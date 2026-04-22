@@ -1,0 +1,16 @@
+CALL gds.graph.project(
+  'grafKomunitasLiterasi',
+  ['Book', 'Author', 'Publisher', 'Genre'],
+  {
+    WRITTEN_BY: { orientation: 'UNDIRECTED' },
+    PUBLISHED_BY: { orientation: 'UNDIRECTED' },
+    BELONGS_TO_GENRE: { orientation: 'UNDIRECTED' }
+  }
+)
+
+CALL gds.louvain.stream('grafKomunitasLiterasi')
+YIELD nodeId, communityId
+RETURN gds.util.asNode(nodeId).name AS Nama_Entitas,
+       labels(gds.util.asNode(nodeId))[0] AS Tipe,
+       communityId AS ID_Komunitas
+ORDER BY ID_Komunitas ASC, Tipe DESC;
