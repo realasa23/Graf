@@ -1,0 +1,25 @@
+// 1. Load Data
+LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/realasa23/Graf/794ee58cb5a4d6500a7d2ad35f3f410a81db8e3f/data_literatur_final.csv" AS row
+
+// 2. FILTER KETAT: Buang baris jika Judul, Penulis, atau Penerbit ada yang NULL
+WITH row 
+WHERE row.final_book_title IS NOT NULL 
+  AND row.authorLabel IS NOT NULL 
+  AND row.final_publisher IS NOT NULL
+
+// 3. Buat Node
+MERGE (b:Book {name: row.final_book_title})
+SET b.release_year = row.release_year 
+
+MERGE (a:Author {name: row.authorLabel})
+MERGE (p:Publisher {name: row.final_publisher})
+
+// 4. Khusus Genre kita pake OPTIONAL MATCH atau handle null biar graf tetep jalan kalau genre kosong
+FOREACH (ignoreMe IN CASE WHEN row.genreLabel IS NOT NULL THEN [1] ELSE [] END |
+  MERGE (g:Genre {name: row.genreLabel})
+  MERGE (b)-[:BELONGS_TO_GENRE]->(g)
+)
+
+// 5. Tarik Relasi Utama
+MERGE (b)-[:WRITTEN_BY]->(a)
+MERGE (b)-[:PUBLISHED_BY]->(p);
