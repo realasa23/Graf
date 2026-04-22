@@ -1,0 +1,20 @@
+SELECT DISTINCT ?bookLabel ?authorLabel ?genreLabel ?publisherLabel
+WHERE {
+  ?book wdt:P31 wd:Q571 ;     # Instance of: Book
+        wdt:P50 ?author ;       # Author
+        wdt:P136 ?genre ;       # Genre
+        wdt:P123 ?publisher .   # Publisher
+
+  ?book rdfs:label ?bookLabel .
+  FILTER(LANG(?bookLabel) = "en")
+
+  ?author rdfs:label ?authorLabel .
+  FILTER(LANG(?authorLabel) = "en")
+
+  ?genre rdfs:label ?genreLabel .
+  FILTER(LANG(?genreLabel) = "en")
+
+  ?publisher rdfs:label ?publisherLabel .
+  FILTER(LANG(?publisherLabel) = "en")
+}
+LIMIT 100
