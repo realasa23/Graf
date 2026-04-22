@@ -1,0 +1,12 @@
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?book ?author ?genre ?publisher ?publishDate
+WHERE {
+  ?book a dbo:Book .
+  ?book dbo:author ?author .
+  ?book dbo:literaryGenre ?genre .
+  ?book dbo:publisher ?publisher .
+  ?book dbo:publicationDate ?publishDate .
+}
+LIMIT 100
