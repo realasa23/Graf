@@ -1,0 +1,16 @@
+CALL gds.graph.project(
+  'grafSentralitasLiterasi',
+  ['Book', 'Author', 'Publisher'],
+  {
+    WRITTEN_BY: { orientation: 'NATURAL' },
+    PUBLISHED_BY: { orientation: 'NATURAL' }
+  }
+)
+
+CALL gds.degree.stream('grafSentralitasLiterasi')
+YIELD nodeId, score
+RETURN gds.util.asNode(nodeId).name AS Nama_Entitas,
+       labels(gds.util.asNode(nodeId))[0] AS Tipe,
+       score AS Jumlah_Koneksi
+ORDER BY Jumlah_Koneksi DESC
+LIMIT 20;
