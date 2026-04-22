@@ -1,0 +1,15 @@
+CALL gds.graph.project(
+  'grafSimilitarityPenulis',
+  ['Author', 'Publisher'],
+  {
+    WORKS_WITH: { orientation: 'UNDIRECTED' }
+  }
+)
+
+CALL gds.nodeSimilarity.stream('grafSimilitarityPenulis')
+YIELD node1, node2, similarity
+RETURN gds.util.asNode(node1).name AS Penulis_1,
+       gds.util.asNode(node2).name AS Penulis_2,
+       similarity AS Skor_Kemiripan
+ORDER BY Skor_Kemiripan DESC
+LIMIT 20;
